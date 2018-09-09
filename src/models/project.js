@@ -45,7 +45,7 @@ export default {
 
     *fetchAccountNumber({ payload }, { call, put  }) {
       try {
-        const url = 'https://as.decentfans.org/hack/cityland';
+        const url = 'https://qinyuchengye.com';
         const requestOption = {
           url: url,
           body: {
@@ -55,15 +55,11 @@ export default {
         };
         console.log('payload====',payload)
         // 发起异步请求
-        const response = yield call(request, requestOption);
-        // 根据返回数据，渲染结果
-        console.log('response====',response)
-        if (response ) {
-          yield put({ type: 'fetchAccountNumber', data: response});
-          //yield put({ type: 'project/fetchBackCITYL' });
-        } else {
-          //yield put({ type: 'fetchAccountNumber', data: response });
-        }
+        fetch(url, requestOption.body)
+          .then(res => res.text())
+          .then((val)=> {
+             //yield put({ type: 'project/fetchBackCITYL' })
+          })
       } catch (err) {
         //yield put({ type: 'fetchAccountNumber', data: response });
       }
@@ -72,12 +68,12 @@ export default {
     *fetchBackCITYL({ payload }, { call, put  }) {
       try {
         const requestOption = {
-          url: 'https://as.decentfans.org/hack/cityland',
+          url: 'https://qinyuchengye.com',
           body: {
             method: 'POST',
             body: {
               "method": "transfer2",
-              "params": [ "dw-cityland","dw-huangxiaolei", "10", "CITYL", "memo"],
+              "params": [ "dw-huang","dw-huangxiaolei", "10", "CITYL", "memo"],
               "id": 10
             },
           },
