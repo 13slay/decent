@@ -1,5 +1,6 @@
 import { queryProject } from '@/services/api';
 import request from '@/utils/request';
+import router from 'umi/router';
 //var express = require("express");
 //var app = express();
 
@@ -43,9 +44,9 @@ export default {
       });
     },
 
-    *fetchAccountNumber({ payload }, { call, put  }) {
+    *fetchAccountNumber({ payload }, { call, put,callback  }) {
       try {
-        const url = 'https://qinyuchengye.com';
+        const url = 'http://qinyuchengye.com';
         const requestOption = {
           url: url,
           body: {
@@ -53,42 +54,42 @@ export default {
             body: JSON.stringify(payload),
           },
         };
-        console.log('payload====',payload)
+        console.log('payload====', payload)
         // 发起异步请求
         let response = yield fetch(url, requestOption.body);
-        response = response.text();
-        yield put({type: 'project/fetchBackCITYL', payload: response})
+        response = yield response.text();
+        yield put({type: 'fetchBackCITYL', payload: JSON.parse(response), data: payload.params})
 
-          //.then(res => res.text())
-          //.then((val)=> {
-             //yield put({ type: 'project/fetchBackCITYL' })
-          //})
       } catch (err) {
         //yield put({ type: 'fetchAccountNumber', data: response });
       }
     },
 
-    *fetchBackCITYL({ payload }, { call, put  }) {
+    *fetchBackCITYL({ payload,data }, { call, put  }) {
       try {
         const requestOption = {
-          url: 'https://qinyuchengye.com',
+          url: 'http://qinyuchengye.com',
           body: {
             method: 'POST',
-            body: {
+            body: JSON.stringify({
               "method": "transfer2",
-              "params": [ "dw-huang","dw-huangxiaolei", "10", "CITYL", "memo"],
+              "params": ["dw-huang", "dw-huangxiaolei", data[2] * 0.00000001, "CITYL", "memo"],
               "id": 10
-            },
+            }),
           },
         };
-        console.log('payload====',payload)
+        console.log('payload!!!====', payload)
         // 发起异步请求
-        const response = yield call(request, requestOption);
+        let response = yield fetch(requestOption.url, requestOption.body);
         // 根据返回数据，渲染结果
-        console.log('response====',response)
-        if (response ) {
+        response = yield response.text();
+        console.log('response====', response);
+        yield  put({type: 'saveResult', payload: {txHash: payload.result[0],number: data[2]}});
+        if (response) {
+          router.push('/result/success');
           //yield put({ type: 'fetchAccountNumber', data: response});
         } else {
+          router.push('/result/fail');
           //yield put({ type: 'fetchAccountNumber', data: response });
         }
       } catch (err) {
@@ -105,13 +106,14 @@ export default {
             body: JSON.stringify(payload),
           },
         };
-        console.log('payload====',payload)
+        console.log('payload====', payload)
         // 发起异步请求
         const response = yield call(request, requestOption);
         // 根据返回数据，渲染结果
-        console.log('response====',response)
-        if (response ) {
-          yield put({ type: 'fetchBuy', data: response});
+        console.log('response====', response)
+        if (response) {
+
+          yield put({type: 'fetchBuy', data: response});
 
         } else {
           //yield put({ type: 'fetchAccountNumber', data: response });

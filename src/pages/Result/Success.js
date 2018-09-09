@@ -47,7 +47,7 @@ class Success extends PureComponent {
         >
           <p>交易Hash: {result.txHash}</p>
           <p>项目名称: {detail.title}</p>
-          <p>认购数量: {number}</p>
+          <p>认购数量: {result.number}</p>
         </div>
       </Fragment>
     );

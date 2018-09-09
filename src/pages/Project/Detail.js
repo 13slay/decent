@@ -56,7 +56,7 @@ class Detail extends PureComponent {
       type: 'project/fetchAccountNumber',
       payload: {
         "method": "transfer2",
-        "params": ["dw-huang", "dw-huangxiaolei", number, "DCT", "认筹"],
+        "params": ["dw-huangxiaolei", "dw-huang", number, "DCT", "认筹"],
         "id": 10
       }
     });
