@@ -55,11 +55,14 @@ export default {
         };
         console.log('payload====',payload)
         // 发起异步请求
-        fetch(url, requestOption.body)
-          .then(res => res.text())
-          .then((val)=> {
+        let response = yield fetch(url, requestOption.body);
+        response = response.text();
+        yield put({type: 'project/fetchBackCITYL', payload: response})
+
+          //.then(res => res.text())
+          //.then((val)=> {
              //yield put({ type: 'project/fetchBackCITYL' })
-          })
+          //})
       } catch (err) {
         //yield put({ type: 'fetchAccountNumber', data: response });
       }
